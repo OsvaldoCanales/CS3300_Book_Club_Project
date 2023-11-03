@@ -27,12 +27,12 @@ class Book(models.Model):
     catalog = models.ForeignKey(Catalog, on_delete=models.CASCADE, default = None)
 
 # Return title of book 
-def __str__(self):
-    return self.title
+    def __str__(self):
+        return self.title
 
 # Return url 
-def get_absolute_url(self):
-    return reverse('Book-detail', args=[str(self.id)])
+    def get_absolute_url(self):
+        return reverse('Book-detail', args=[str(self.id)])
 
         
 

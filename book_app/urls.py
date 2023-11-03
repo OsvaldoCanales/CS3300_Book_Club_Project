@@ -6,7 +6,7 @@ urlpatterns = [
 #'' is empty to represent based path to app
 # views.index is the function defined in view.py
 # name='index' parameter is to dynamically create url
-# example in html <a href="{% url 'index' %})>Hoe</a>.
+# example in html <a href="{% url 'index' %})></a>.
 
 path('', views.index, name= 'index'),
 path('catalogs/', views.CatalogListView.as_view(), name = 'catalogs'),
