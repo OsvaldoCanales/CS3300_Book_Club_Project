@@ -6,7 +6,7 @@ from django.urls import reverse
 
 #Setup Book Catolog for different types of books
 class Catalog(models.Model):
-    genre = models.Charfield(max_length=200)
+    genre = models.CharField(max_length=200)
     about = models.TextField(null=True, blank= True)
 
     # Default string to return genre title for Book Catalog
@@ -18,9 +18,9 @@ class Catalog(models.Model):
     
 #Reader can list books into their catolog
 class Book(models.Model):
-    title =models.Charfield(max_length=200)
-    author= models.Charfield(max_length=200)
-    publication_date = models.Charfield(max_length=200)
+    title =models.CharField(max_length=200)
+    author= models.CharField(max_length=200)
+    publication_date = models.CharField(max_length=200)
     description=models.TextField(null=True, blank=False)
     is_active = models.BooleanField(default=False)
     review = models.TextField(null=True, blank=True)
