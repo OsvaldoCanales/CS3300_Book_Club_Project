@@ -1,18 +1,17 @@
 <!-- inherit from base.html-->
 {% extends "book_app/base_template.html" %}
 
-
 <!-- Replace block content in base_template.html -->
 <!-- Note: This is what the home page will look like -->
 {% block content %}
 <h1>The Scholar Ship Collections</h1>
 
-<h2>Books In Progress </h2>
-<ul class ="list group">
-    {% for i in active_books %}
-    <li class="list-group-item"> Book Title: {{i.title}}
-    <p><strong>Book:{{ i.book.title }}
-    <a class="btn btn-primary" href="{{ i.book.get_absolute_url }}" role="button">View</a>
+<h2>Books In Progress</h2>
+<ul class="list-group">
+    {% for book in active_books %}
+    <li class="list-group-item"> Book Title: {{ book.title }}
+        <a class="btn btn-primary" href="{{ book.get_absolute_url }}" role="button">View</a>
     </li>
     {% endfor %}
 </ul>
+{% endblock %}

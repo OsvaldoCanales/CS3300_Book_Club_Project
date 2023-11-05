@@ -3,13 +3,11 @@ from django.urls import reverse
 
 # Create your models here.
 
-
 #Setup Book Catolog for different types of books
 class Catalog(models.Model):
     title = models.CharField(max_length=200)
     genre = models.TextField(null = True, blank = False)
     about = models.TextField(null=True, blank= False)
-    
     # Default string to return genre title for Book Catalog
     def __str__(self):
         return self.title
@@ -26,6 +24,7 @@ class Book(models.Model):
     description=models.TextField(null=True, blank=False)
     is_active = models.BooleanField(default=False)
     review = models.TextField(null=True, blank=True)
+    catalog = models.ForeignKey(Catalog, on_delete=models.CASCADE, null = True)
    
 
 # Return title of book 
@@ -35,6 +34,9 @@ class Book(models.Model):
 # Return url 
     def get_absolute_url(self):
         return reverse('Book-detail', args=[str(self.id)])
+
+
+
 
 
 

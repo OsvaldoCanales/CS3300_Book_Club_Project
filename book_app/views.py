@@ -8,9 +8,9 @@ from .models import Catalog, Book
 
 # HomePage 
 def index(request):
-    active_books = Catalog.objects.select_related('book').all().filter(book__is_active=True)
+    active_books = Book.objects.filter(is_active=True)
     print("Active Books available", active_books )
-    return render( request, 'book_app/index.html', {'Book Catalogs':active_books})
+    return render(request, 'book_app/index.html', {'Book Catalogs':active_books})
 
 
 #List all available Catalogs
