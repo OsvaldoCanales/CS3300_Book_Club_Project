@@ -1,0 +1,22 @@
+<!-- inherit from base.html -->
+{% extends 'book_app/base_template.html' %}
+
+
+<!-- Replace block content in base_template.html -->
+{% block content %}
+
+<p> Are you sure you want to delete {{book.title }}</p>
+
+<form method = "POST">
+
+{% csrf_token %}
+
+<a class="btn btn-primary" href="{% url 'Catalog-detail' catalog.id %}" role="button">Cancel</a>
+
+
+<input type="submit" name="Yes">
+
+
+</form>
+
+{% endblock %}

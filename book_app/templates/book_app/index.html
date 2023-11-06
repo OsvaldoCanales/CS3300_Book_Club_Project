@@ -1,17 +1,20 @@
-<!-- inherit from base.html-->
-{% extends "book_app/base_template.html" %}
+{% extends 'book_app/base_template.html' %}
+{% load static %}
 
-<!-- Replace block content in base_template.html -->
-<!-- Note: This is what the home page will look like -->
 {% block content %}
-<h1>The Scholar Ship Collections</h1>
+  <div style="background-color: #474621; padding: 20px;">
+    <h1 style="color: #f5bc2b;">The Scholar Ship Collections</h1>
 
-<h2>Books In Progress</h2>
-<ul class="list-group">
-    {% for book in active_books %}
-    <li class="list-group-item"> Book Title: {{ book.title }}
+    <h2 style="color: #f5bc2b;">Books In Progress</h2>
+    <ul class="list-group">
+      {% for book in active_books %}
+      <li class="list-group-item" style="color: #333;"> Book Title: {{ book.title }}
         <a class="btn btn-primary" href="{{ book.get_absolute_url }}" role="button">View</a>
-    </li>
-    {% endfor %}
-</ul>
+      </li>
+      {% endfor %}
+    </ul>
+
+    <img src="{% static 'images/pirate_ship.gif' %}" alt="Moving GIF" style="width: 100px; height: 100px;">
+  </div>
 {% endblock %}
+

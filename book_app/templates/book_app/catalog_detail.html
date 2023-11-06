@@ -1,0 +1,26 @@
+{% extends 'book_app/base_template.html' %}
+
+{% block content %}
+<div style="background-color: #86dad0; padding: 20px;">
+  <h1 style="color: #0051ff;">Catalog Title: {{ catalog.title }}</h1>
+  <a class="btn btn-primary" href="{% url 'update_catalog' catalog.id %}" role="button">Update Catalog</a>
+  <p> <strong style="color: #0051ff;">Genre: </strong>{{ catalog.genre }}</p>
+  <p> <strong style="color: #0051ff;">About: </strong> {{ catalog.about }} </p>
+  <h1 style="color: #0051ff;">Book Library</h1>
+  <a class="btn btn-primary" href="{% url 'create_book' catalog.id %}" role="button">New Book</a>
+  {% if books %}
+    <ul>
+      {% for book in books %}
+      <li>
+        <span style="color: #333; font-weight: bold;">{{ book.title }}</span>:
+        <a class="btn btn-primary" href="{{ book.get_absolute_url }}" role="button">View</a>
+        <a class="btn btn-primary" href="{% url 'update_book' book.id catalog.id %}" role="button">Update</a>
+        <a class="btn btn-primary" href="{% url 'delete_book' book.id catalog.id %}" role="button">Delete</a>
+      </li>
+      {% endfor %}
+    </ul>
+  {% else %}
+    <p>This Catalog has no books.</p>
+  {% endif %}
+</div>
+{% endblock %}
