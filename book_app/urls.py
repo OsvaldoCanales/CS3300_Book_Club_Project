@@ -1,4 +1,4 @@
-from django.urls import path
+from django.urls import path, include
 from .import views
 
 urlpatterns = [
@@ -16,5 +16,7 @@ path('books/', views.BookDetailView.as_view(), name = 'books'),
 path('book/<int:pk>/', views.BookDetailView.as_view(), name ='Book-detail'),
 path('catalog/<int:catalog_id>/create_book/', views.createBook, name = 'create_book' ),
 path('catalog/<int:book_id>/delete_book/<int:catalog_id>/',views.deleteBook, name = 'delete_book'),
-path('catalog/<int:book_id>/update_book/<int:catalog_id>/', views.updateBook, name = 'update_book'),
+path('catalog/<int:book_id>/update_book/<int:catalog_id>/', views.updateBook, name = 'update_book'), 
+#Add Django site authentication urls (for login, logout, password maangement)
+path('accounts/', include('django.contrib.auth.urls')),
 ]
