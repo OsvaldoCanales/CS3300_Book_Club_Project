@@ -4,6 +4,7 @@ from django.views import generic
 from django.views.generic.list import ListView
 from .models import Catalog, Book
 from .forms import CatalogForm, BookForm
+from django.contrib.auth import logout
 
 
 
@@ -134,3 +135,8 @@ def deleteBook(request,book_id, catalog_id):
             
     context = {'form': book}
     return render(request, 'book_app/book_delete.html', context)
+
+
+def custom_logout(request):
+    logout(request)
+    return render(request, 'registration/logged_out.html')
