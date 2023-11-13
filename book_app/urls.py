@@ -1,5 +1,6 @@
 from django.urls import path, include
 from .import views
+from django.contrib.auth.views import LogoutView
 
 urlpatterns = [
 # path function defines a url pattern
@@ -19,4 +20,6 @@ path('catalog/<int:book_id>/delete_book/<int:catalog_id>/',views.deleteBook, nam
 path('catalog/<int:book_id>/update_book/<int:catalog_id>/', views.updateBook, name = 'update_book'), 
 #Add Django site authentication urls (for login, logout, password maangement)
 path('accounts/', include('django.contrib.auth.urls')),
+path('accounts/logout/', LogoutView.as_view(template_name = 'book_app/logout.html'), name = 'logout'),
+
 ]
