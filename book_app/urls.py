@@ -19,8 +19,9 @@ path('book/<int:pk>/', views.BookDetailView.as_view(), name ='Book-detail'),
 path('catalog/<int:catalog_id>/create_book/', views.createBook, name = 'create_book' ),
 path('catalog/<int:book_id>/delete_book/<int:catalog_id>/',views.deleteBook, name = 'delete_book'),
 path('catalog/<int:book_id>/update_book/<int:catalog_id>/', views.updateBook, name = 'update_book'), 
-path('logout/', views.custom_logout, name ='logout'),
 #Add Django site authentication urls (for login, logout, password maangement)
+path('accounts/logout/', views.logoutUser, name = 'logout' ),
+path('accounts/register/', views.registerPage, name = 'register_page'),
 path('accounts/', include('django.contrib.auth.urls')),
 
 ]

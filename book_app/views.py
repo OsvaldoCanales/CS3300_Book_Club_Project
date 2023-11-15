@@ -2,9 +2,13 @@ from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from django.views import generic
 from django.views.generic.list import ListView
-from .models import Catalog, Book
-from .forms import CatalogForm, BookForm
+
+from .models import Catalog, Book, Member
+from .forms import CatalogForm, BookForm, CreateUserForm
+
 from django.contrib.auth import logout
+from django.contrib import messages
+from django.contrib.auth.models import Group, User
 
 
 
@@ -136,7 +140,29 @@ def deleteBook(request,book_id, catalog_id):
     context = {'form': book}
     return render(request, 'book_app/book_delete.html', context)
 
-
-def custom_logout(request):
+# Had to create a custom view because it would not direct to the html file but rather the admin panel
+def logoutUser(request):
     logout(request)
-    return render(request, 'registration/logged_out.html')
+    return redirect('login')
+
+#User will be directed to register 
+def registerPage(request):
+      form = CreateUserForm()
+
+      if request.method == 'POST':
+            form = CreateUserForm(request.POST)
+            if form.is_valid():
+                user = form.save()
+                username = form.cleaned_data.get('username')
+                group = Group.objects.get(name = 'Book Members')
+                user.groups.add(group)
+                member = Member.objects.create(user=user)
+                member.save()
+                messages.success(request, 'Account was created for' + username)
+                return redirect('login')
+
+
+      context = {'form':form}
+      return render(request, 'registration/register.html', context)
+
+       

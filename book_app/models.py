@@ -1,6 +1,8 @@
 from django.db import models
 from django.urls import reverse
 
+from django.contrib.auth.models import User
+
 # Create your models here.
 
 #Setup Book Catolog for different types of books
@@ -16,7 +18,7 @@ class Catalog(models.Model):
         return reverse('Catalog-detail', args=[str(self.id)])
     
         
-#Reader can list books into their catolog
+#Reader can list books into their catalog
 class Book(models.Model):
     title =models.CharField(max_length=200)
     author= models.CharField(max_length=200)
@@ -34,8 +36,21 @@ class Book(models.Model):
 # Return url 
     def get_absolute_url(self):
         return reverse('Book-detail', args=[str(self.id)])
-
-
+    
+#Set up Member list 
+class Member(models.Model):
+    name = models.CharField(max_length =200)
+    email = models.CharField(max_length = 200)
+    catalog = models.ForeignKey(Catalog, on_delete=models.CASCADE, null = True )
+    user= models.ForeignKey(User, on_delete=models.CASCADE, null= True)
+    
+#Define default string to return member name
+    def __str__(self):
+        return self.name
+    
+#If requested then return member details 
+    def get_absolute_url(self):
+        return reverse('member-detail', arg=[str(self.id)])
 
 
 
