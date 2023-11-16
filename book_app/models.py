@@ -42,7 +42,7 @@ class Member(models.Model):
     name = models.CharField(max_length =200)
     email = models.CharField(max_length = 200)
     catalog = models.ForeignKey(Catalog, on_delete=models.CASCADE, null = True )
-    user= models.ForeignKey(User, on_delete=models.CASCADE, null= True)
+    user= models.OneToOneField(User, on_delete=models.CASCADE, null= True)
     
 #Define default string to return member name
     def __str__(self):

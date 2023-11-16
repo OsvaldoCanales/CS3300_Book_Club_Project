@@ -9,6 +9,8 @@ from .forms import CatalogForm, BookForm, CreateUserForm
 from django.contrib.auth import logout
 from django.contrib import messages
 from django.contrib.auth.models import Group, User
+from django.contrib.auth.decorators import login_required
+from .decorators import allowed_users
 
 
 
@@ -45,6 +47,9 @@ class BookListView(generic.ListView):
 class BookDetailView(generic.DetailView):
     model = Book
 
+#Restrict access to update catalogs if not logged in
+@login_required(login_url= 'login')
+@allowed_users(allowed_roles= ['Book Members'] )
 #Class to update the Catalog
 def updateCatalog(request, catalog_id):
     catalog = Catalog.objects.get(pk=catalog_id)
@@ -70,6 +75,9 @@ def updateCatalog(request, catalog_id):
     return render(request, 'book_app/catalog_form.html', context)
 
 
+#Restrict access to create a book if not logged in 
+@login_required(login_url= 'login')
+@allowed_users(allowed_roles= ['Book Members'] )
 #Class to insert a book
 def createBook(request, catalog_id):
     form = BookForm()
@@ -95,7 +103,9 @@ def createBook(request, catalog_id):
     context = {'form': form}
     return render(request, 'book_app/catalog_form.html', context)
 
-
+#Restrict access to update a book if not logged in
+@login_required(login_url= 'login')
+@allowed_users(allowed_roles= ['Book Members'] )
 #Class to update a book
 def updateBook(request, book_id, catalog_id):
     book = Book.objects.get(pk =book_id)
@@ -122,7 +132,9 @@ def updateBook(request, book_id, catalog_id):
     context = {'form': form}
     return render(request, 'book_app/catalog_form.html', context)
 
-
+#Restrict access to delete a book if not logged in
+@login_required(login_url= 'login')
+@allowed_users(allowed_roles= ['Book Members'] )
 #Class to delete a book 
 def deleteBook(request,book_id, catalog_id):
 
@@ -153,12 +165,15 @@ def registerPage(request):
             form = CreateUserForm(request.POST)
             if form.is_valid():
                 user = form.save()
+                #Get the username from the form
                 username = form.cleaned_data.get('username')
+                #Get the group to add user 
                 group = Group.objects.get(name = 'Book Members')
                 user.groups.add(group)
+                #Create a member to the database
                 member = Member.objects.create(user=user)
                 member.save()
-                messages.success(request, 'Account was created for' + username)
+                messages.success(request, 'Account was created for ' + username)
                 return redirect('login')
 
 
