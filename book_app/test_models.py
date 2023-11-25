@@ -2,6 +2,7 @@ from django.test import TestCase
 from django.contrib.auth.models import User
 from book_app.models import Member, Book, Catalog
 
+
 #This tests whether if the member's name is returned properly
 class MemberModelTest(TestCase):
     def setUp(self):
@@ -13,6 +14,7 @@ class MemberModelTest(TestCase):
         #Test that the _str_method returns the name of the member
         self.assertEqual(str(self.member), 'test Member100')
 
+#This tests where a book is created correctly and matches with the catalog 
 class BookModelTest(TestCase):
     def setUp(self):
         # Create a user 
