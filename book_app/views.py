@@ -4,7 +4,7 @@ from django.views import generic
 from django.views.generic.list import ListView
 
 from .models import Catalog, Book, Member
-from .forms import CatalogForm, BookForm, CreateUserForm
+from .forms import CatalogForm, BookForm, CreateUserForm, MemberForm
 
 from django.contrib.auth import logout
 from django.contrib import messages
@@ -12,6 +12,7 @@ from django.contrib.auth.models import Group, User
 from django.contrib.auth.decorators import login_required
 from .decorators import allowed_users
 
+from django.contrib.auth.mixins import LoginRequiredMixin
 
 
 # HomePage 
@@ -20,15 +21,23 @@ def index(request):
     print("Active Books available", active_books )
     return render(request, 'book_app/index.html', {'active_books':active_books})
 
+#This will display only the catalogs of the signed in user
+@login_required(login_url='login')
+@allowed_users(allowed_roles=['Book Members'])
+def catalogsView(request):
+    member = request.user.member
+    catalogs = member.members.all() if member.catalog else []
+    context = {'catalogs': catalogs}
+    return render(request, 'book_app/user_catalogs.html', context)
 
 #List all available Catalogs
 # Note: Since we have a generic List implemented, 
 # it will automatically render a catalog_list.html that we need to create
-class CatalogListView(generic.ListView):
+class CatalogListView(LoginRequiredMixin, generic.ListView):
     model = Catalog
 
 #List detail of catalog
-class CatalogDetailView(generic.DetailView):
+class CatalogDetailView(LoginRequiredMixin, generic.DetailView):
     model = Catalog
 
     #Get all books associated with that catalog 
@@ -40,12 +49,42 @@ class CatalogDetailView(generic.DetailView):
         return context
 
 #List all available books
-class BookListView(generic.ListView):
+class BookListView(LoginRequiredMixin, generic.ListView):
     model = Book
 
 #List the detail of that book 
-class BookDetailView(generic.DetailView):
+class BookDetailView(LoginRequiredMixin, generic.DetailView):
     model = Book
+
+@login_required(login_url= 'login')
+@allowed_users(allowed_roles= ['Book Members'])
+#Function that allows members to create a catalog 
+def createCatalog(request):
+    form = CatalogForm()
+
+    if request.method == 'POST':
+        #Create a dictonairy with the form data
+        catalog_data = request.POST.copy()
+        
+        form = CatalogForm(catalog_data)
+        #Checks to see if the form was filled out correctly
+        if form.is_valid():
+            #Get the current user
+            user = request.user
+            #Save the form 
+            catalog = form.save(commit= False)
+            #Associate the catalog with the current user
+            catalog.member = user
+            catalog.save()
+
+            #Redirect back to catalog 
+            return redirect('catalogs')
+        
+    context = {'form': form}
+    return render(request, 'book_app/create_catalog.html', context)
+
+
+
 
 #Restrict access to update catalogs if not logged in
 @login_required(login_url= 'login')
@@ -165,13 +204,15 @@ def registerPage(request):
             form = CreateUserForm(request.POST)
             if form.is_valid():
                 user = form.save()
+                #Get the name from the form
+                #name = form.cleaned_data.get('name')
                 #Get the username from the form
                 username = form.cleaned_data.get('username')
                 #Get the group to add user 
                 group = Group.objects.get(name = 'Book Members')
                 user.groups.add(group)
                 #Create a member to the database
-                member = Member.objects.create(user=user)
+                member = Member.objects.create(user=user, name = username)
                 member.save()
                 messages.success(request, 'Account was created for ' + username)
                 return redirect('login')
@@ -179,5 +220,26 @@ def registerPage(request):
 
       context = {'form':form}
       return render(request, 'registration/register.html', context)
+
+@login_required(login_url= 'login')
+@allowed_users(allowed_roles= ['Book Members'] )
+#User will be able to look at his own books and catalogs
+def userPage(request):
+    member = request.user.member
+    form = MemberForm(instance = member)
+    print('member', member)
+    catalogs = member.catalogs.all() if member.catalog else []
+    #Debugging that allows me to see catalogs created 
+    print('catalogs:', catalogs)
+    for catalog in catalogs:
+        print(f'Books in catalog {catalog.title}: {catalog.book_set.all()}')
+    if request.method == 'POST':
+        form = MemberForm(request.POST, request.FILES, instance = member)
+        if form.is_valid():
+            form.save()
+    #context = {'catalogs':catalogs, 'form':form}
+    context = {'member': member, 'form': form, 'catalogs': catalogs }
+    return render(request, 'book_app/user.html', context)
+
 
        

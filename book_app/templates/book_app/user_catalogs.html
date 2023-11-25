@@ -1,0 +1,12 @@
+{% extends 'book_app/base_template.html' %}
+{% load static %}
+
+{% block content %}
+<div style="background-color: #474621; padding: 20px;">
+   <h1 style="color: #f5bc2b;">Your Catalogs</h1>
+   {% for catalog in catalogs %}
+      <h2>{{ catalog.title }}</h2>
+      <!-- Add any other catalog details you want to display -->
+   {% endfor %}
+</div>
+{% endblock %}

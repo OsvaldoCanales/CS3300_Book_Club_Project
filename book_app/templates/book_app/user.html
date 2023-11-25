@@ -1,0 +1,30 @@
+{% extends 'book_app/base_template.html' %}
+{% load static %}
+
+{% block content %}
+<div style="background-color: #474621; padding: 20px;">
+    <h1 style="color: #f5bc2b;">The Scholar Ship Collections</h1>
+
+    <h2 style="color: #f5bc2b;">Books In Progress</h2>
+    <ul class="list-group">
+      {% for book in user.member.books.all %}
+        {% if book.is_active %}
+      <li class="list-group-item" style="color: #333;"> Book Title: {{ book.title }}
+        <a class="btn btn-primary" href="{{ book.get_absolute_url }}" role="button">View</a>
+      </li>
+        {% endif %}
+      {% endfor %}
+    </ul>
+
+    <br>
+
+      <!-- Add the link/button to create a catalog -->
+      <a class="btn btn-success" href="{% url 'create_catalog' %}" role="button">Create Catalog</a>
+      <!-- Add a link/button to view catalogs  -->
+      <a class="btn btn-success" href="{% url 'catalogs_view' %}" role="button">View Catalogs</a>
+
+    
+
+    <img src="{% static 'images/uccs_logo.gif' %}">
+  </div>
+{% endblock %}

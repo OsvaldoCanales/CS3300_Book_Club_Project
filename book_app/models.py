@@ -3,13 +3,14 @@ from django.urls import reverse
 
 from django.contrib.auth.models import User
 
-# Create your models here.
-
 #Setup Book Catolog for different types of books
+#Catalog can have as many books 
+#Each catalog falls under only one user
 class Catalog(models.Model):
     title = models.CharField(max_length=200)
     genre = models.TextField(null = True, blank = False)
     about = models.TextField(null=True, blank= False)
+    member = models.ForeignKey(User, on_delete= models.CASCADE, related_name='catalogs', null=True)                                
     # Default string to return genre title for Book Catalog
     def __str__(self):
         return self.title
@@ -19,6 +20,7 @@ class Catalog(models.Model):
     
         
 #Reader can list books into their catalog
+#Book falls only under one catalog but there can be many books
 class Book(models.Model):
     title =models.CharField(max_length=200)
     author= models.CharField(max_length=200)
@@ -41,7 +43,7 @@ class Book(models.Model):
 class Member(models.Model):
     name = models.CharField(max_length =200)
     email = models.CharField(max_length = 200)
-    catalog = models.ForeignKey(Catalog, on_delete=models.CASCADE, null = True )
+    catalog = models.ForeignKey(Catalog, on_delete=models.CASCADE, null = True, related_name = 'catalogs')
     user= models.OneToOneField(User, on_delete=models.CASCADE, null= True)
     
 #Define default string to return member name
