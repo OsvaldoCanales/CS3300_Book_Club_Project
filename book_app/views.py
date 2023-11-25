@@ -228,6 +228,8 @@ def userPage(request):
     member = request.user.member
     form = MemberForm(instance = member)
     print('member', member)
+    #Come back later to fix issue 
+    #Wil not print member's catalogs
     catalogs = member.catalogs.all() if member.catalog else []
     #Debugging that allows me to see catalogs created 
     print('catalogs:', catalogs)
