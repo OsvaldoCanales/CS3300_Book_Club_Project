@@ -188,7 +188,7 @@ def deleteBook(request,book_id, catalog_id):
         return redirect('Catalog-detail', catalog_id)
         
             
-    context = {'form': book}
+    context = {'book': book}
     return render(request, 'book_app/book_delete.html', context)
 
 # Had to create a custom view because it would not direct to the html file but rather the admin panel
