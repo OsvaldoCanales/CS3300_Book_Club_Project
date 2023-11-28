@@ -7,7 +7,14 @@
 {% block content %}
 <body style="height: 100vh" >
 <div style="background-color: #40290ce4; padding: 20px; font-family: 'Times New Roman', Times, serif; width: 100%;">
-    <h1 style="color: #f5bc2b">The Scholar Ship Collections</h1>
+    <h1 style="color: #f5bc2b;">The Scholar Ship Collections</h1>
+
+     <!-- Introduction Section -->
+     <div style="background-color: #573710e4;; padding: 20px; font-family: 'Courier New', Courier, monospace; color: #ffffff; font-size: 18px; margin-bottom: 20px;">
+      <p>
+          Welcome to The Scholar Ship Collections! This is where you can manage and store collections filled with books!. Members can interact with other members through Book Clubs! Explore the features below and start your literary journey.
+      </p>
+  </div>
          <!-- Add the link/button to create a catalog -->
          <a class="btn btn-success" href="{% url 'create_catalog' %}" role="button">Create Catalog</a>
          <!-- Add a link/button to view catalogs  -->
@@ -18,7 +25,7 @@
     <br>
     <h2 style="color: #f5bc2b;">Books In Progress</h2>
     <ul class="list-group">
-      {% for book in user.member.books.all %}
+      {% for book in active_books %}
         {% if book.is_active %}
       <li class="list-group-item" style="color: #333;"> Book Title: {{ book.title }}
         <a class="btn btn-primary" href="{{ book.get_absolute_url }}" role="button">View</a>
@@ -26,6 +33,16 @@
         {% endif %}
       {% endfor %}
     </ul>
+     <!-- Book Club Section -->
+     <div style="background-color: #573710e4;; padding: 20px; font-family: 'Courier New', Courier, monospace; color: #ffffff; font-size: 18px; margin-bottom: 20px;">
+      <p>
+          Interested in starting your own Book Club? Invite your friends or join them! 
+      </p>
+        <!-- Add the link/button to create a book club -->
+        <a class="btn btn-success" href="{% url 'create_catalog' %}" role="button">Start your own Club!</a>
+        <!-- Add a link/button to joining a book club  -->
+        <a class="btn btn-success" href="{% url 'catalogs_view' %}" role="button">Join a Club!</a>
+  </div>
   </div>
 </body>
 {% endblock %}

@@ -239,8 +239,11 @@ def userPage(request):
         form = MemberForm(request.POST, request.FILES, instance = member)
         if form.is_valid():
             form.save()
-    #context = {'catalogs':catalogs, 'form':form}
-    context = {'member': member, 'form': form, 'catalogs': catalogs }
+
+    active_books = Book.objects.filter(is_active=True)
+    print("Active Books available", active_books )
+
+    context = {'member': member, 'form': form, 'catalogs': catalogs, 'active_books': active_books }
     return render(request, 'book_app/user.html', context)
 
 
