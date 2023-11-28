@@ -4,9 +4,16 @@
 {% block content %}
 <div style="background-color: #474621; padding: 20px;">
    <h1 style="color: #f5bc2b;">Your Catalogs</h1>
+   {% if catalogs %}
+   <ul>
    {% for catalog in catalogs %}
-      <h2>{{ catalog.title }}</h2>
-      <!-- Add any other catalog details you want to display -->
+      <li>
+         <a href="{{ catalog.get_absolute_url }}">{{ catalog.title }}</a>
+      </li>
    {% endfor %}
+</ul>
+{% else %}
+<p> No catalogs available </p>
+{% endif %}
 </div>
 {% endblock %}

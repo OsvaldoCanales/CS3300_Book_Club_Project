@@ -26,7 +26,7 @@ def index(request):
 @allowed_users(allowed_roles=['Book Members'])
 def catalogsView(request):
     member = request.user.member
-    catalogs = member.members.all() if member.catalog else []
+    catalogs = request.user.member.catalogs.all() 
     context = {'catalogs': catalogs}
     return render(request, 'book_app/user_catalogs.html', context)
 
@@ -69,16 +69,16 @@ def createCatalog(request):
         form = CatalogForm(catalog_data)
         #Checks to see if the form was filled out correctly
         if form.is_valid():
-            #Get the current user
-            user = request.user
+            #Get the current member
+            member = request.user.member
             #Save the form 
             catalog = form.save(commit= False)
-            #Associate the catalog with the current user
-            catalog.member = user
+            #Associate the catalog with the current member
+            catalog.member = member
             catalog.save()
 
             #Redirect back to catalog 
-            return redirect('catalogs')
+            return redirect('catalogs_view')
         
     context = {'form': form}
     return render(request, 'book_app/create_catalog.html', context)
@@ -230,7 +230,7 @@ def userPage(request):
     print('member', member)
     #Come back later to fix issue 
     #Wil not print member's catalogs
-    catalogs = member.catalogs.all() if member.catalog else []
+    catalogs = request.user.member.catalogs.all() #if member.catalog else []
     #Debugging that allows me to see catalogs created 
     print('catalogs:', catalogs)
     for catalog in catalogs:

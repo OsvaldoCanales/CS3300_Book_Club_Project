@@ -3,6 +3,20 @@ from django.urls import reverse
 
 from django.contrib.auth.models import User
 
+#Set up Member list 
+class Member(models.Model):
+    name = models.CharField(max_length =200)
+    email = models.CharField(max_length = 200)
+    user= models.OneToOneField(User, on_delete=models.CASCADE, null= True)
+    
+#Define default string to return member name
+    def __str__(self):
+        return self.name
+    
+#If requested then return member details 
+    def get_absolute_url(self):
+        return reverse('member-detail', arg=[str(self.id)])
+
 #Setup Book Catolog for different types of books
 #Catalog can have as many books 
 #Each catalog falls under only one user
@@ -10,7 +24,7 @@ class Catalog(models.Model):
     title = models.CharField(max_length=200)
     genre = models.TextField(null = True, blank = False)
     about = models.TextField(null=True, blank= False)
-    member = models.ForeignKey(User, on_delete= models.CASCADE, related_name='catalogs', null=True)                                
+    member = models.ForeignKey(Member, on_delete= models.CASCADE, related_name='catalogs', null=True)                                
     # Default string to return genre title for Book Catalog
     def __str__(self):
         return self.title
@@ -39,21 +53,8 @@ class Book(models.Model):
     def get_absolute_url(self):
         return reverse('Book-detail', args=[str(self.id)])
     
-#Set up Member list 
-class Member(models.Model):
-    name = models.CharField(max_length =200)
-    email = models.CharField(max_length = 200)
-    catalog = models.ForeignKey(Catalog, on_delete=models.CASCADE, null = True, related_name = 'catalogs')
-    user= models.OneToOneField(User, on_delete=models.CASCADE, null= True)
-    
-#Define default string to return member name
-    def __str__(self):
-        return self.name
-    
-#If requested then return member details 
-    def get_absolute_url(self):
-        return reverse('member-detail', arg=[str(self.id)])
 
 
 
 
+#class Book 

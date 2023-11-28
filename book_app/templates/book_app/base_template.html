@@ -9,11 +9,12 @@
     {% bootstrap_css %}
     {% bootstrap_javascript %}
 </head>
-<body>
+<body style = "height: 100vh;">
     <!-- Navbar -->
-    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <nav class="navbar navbar-expand-lg navbar-light bg-light" style="font-family: 'Times New Roman', Times, serif;">
+        <div class = "container-fluid">
+        <img src="{% static 'images/book.gif' %}" class = "img-thumbnail" style = "width: 50px; height: 50px;">
         <a class="navbar-brand" href="#">The Scholar Ship</a>
-        <img src="{% static 'images/uccs_logo.gif' %}">
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
@@ -37,7 +38,7 @@
             <ul class="navbar-nav ml-auto">
                 {% if user.is_authenticated %}
                     <li class="nav-item">
-                        <span class="navbar-text">Welcome,{{user.username}}!</span>
+                        <span class="navbar-text">Welcome {{user.username}}!</span>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="{% url 'logout' %}">Logout</a>
@@ -49,6 +50,7 @@
                 {% endif %}
             </ul>
         </div>
+    </div>
     </nav>
 
     <!-- add block content from html template -->
