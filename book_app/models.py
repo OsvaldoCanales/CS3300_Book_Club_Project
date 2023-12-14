@@ -42,7 +42,8 @@ class Book(models.Model):
     description=models.TextField(null=True, blank=False)
     is_active = models.BooleanField(default=False)
     review = models.TextField(null=True, blank=True)
-    catalog = models.ForeignKey(Catalog, on_delete=models.CASCADE, default= None)
+    #Updated updated name to "books"
+    catalog = models.ForeignKey(Catalog, on_delete=models.CASCADE, related_name='books', default= None)
    
 
 # Return title of book 

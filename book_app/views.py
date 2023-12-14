@@ -228,19 +228,24 @@ def userPage(request):
     member = request.user.member
     form = MemberForm(instance = member)
     print('member', member)
-    #Come back later to fix issue 
-    #Wil not print member's catalogs
     catalogs = request.user.member.catalogs.all() #if member.catalog else []
     #Debugging that allows me to see catalogs created 
     print('catalogs:', catalogs)
     for catalog in catalogs:
-        print(f'Books in catalog {catalog.title}: {catalog.book_set.all()}')
+        print(f'Books in catalog {catalog.title}: {catalog.books.all()}')
     if request.method == 'POST':
         form = MemberForm(request.POST, request.FILES, instance = member)
         if form.is_valid():
             form.save()
 
-    active_books = Book.objects.filter(is_active=True)
+
+    #Array to hold active books
+    active_books = []
+    #Loop through each catalog and retrieve each active book and extend to add all books to list
+    for catalog in catalogs:
+        books_in_catalog = catalog.books.filter(is_active=True)
+        active_books.extend(books_in_catalog)
+
     print("Active Books available", active_books )
 
     context = {'member': member, 'form': form, 'catalogs': catalogs, 'active_books': active_books }
